@@ -1,51 +1,75 @@
-const fetch = require('node-fetch');
+const axios = require("axios");
+
+const fs = require('fs-extra');
+
+const path = require('path');
+
+const { shortenURL } = global.utils;
+
+
+
+async function shortURL(api, event) {
+
+    if (event.type !== "message_reply" || !event.messageReply.attachments || event.messageReply.attachments.length === 0) {
+
+        return api.sendMessage({ body: "❌ | Please reply to an attachment." }, event.threadID, event.messageID);
+
+    }
+
+
+
+    const attachment = event.messageReply.attachments[0];
+
+
+
+    try {
+
+        const shortUrl = await shortenURL(attachment.url);
+
+        api.sendMessage({ body: `${shortUrl}` }, event.threadID, event.messageID);
+
+    } catch (error) {
+
+        api.sendMessage({ body: "❌ | Error occurred while shortening URL." }, event.threadID, event.messageID);
+
+        console.error(error);
+
+    }
+
+}
+
+
 
 module.exports = {
-  config: {
-    name: "imgbb",
-    version: "1.0",
-    author: "Samir Œ",
-    countDown: 5,
-    role: 0,
-    shortDescription: "Upload an image to imgbb",
-    longDescription: "Upload an image to imgbb",
-    category: "utility",
-    guide: "{pn} <attached image>"
-  },
 
-  onStart: async function ({ message, event }) {
-    try {
-      const attachments = event.messageReply.attachments;
-      if (!attachments || attachments.length === 0) {
-        return message.reply("Please reply to a message with an attached image to upload.");
-      }
+    config: {
 
-      const imageUrl = attachments[0].url;
+        name: "imgbb",
 
-      const uploadUrl = 'https://api-samir.onrender.com/upload';
-      const data = { file: imageUrl };
+        aliases: ["I"],
 
-      const response = await fetch(uploadUrl, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
+        version: "2.0",
 
-      const result = await response.json();
+        author: "Vex_Kshitiz",
 
-      if (result && result.image && result.image.url) {
-        const cleanImageUrl = result.image.url.split('-')[0]; 
-       
-        message.reply({body: `${cleanImageUrl}.jpg`})
-      } else {
-        message.reply("Failed to upload the image to imgbb.");
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      message.reply(`Error: ${error}`);
+        countDown: 10,
+
+        role: 0,
+
+        shortDescription: "alternative of imgurl",
+
+        longDescription: "alternative of imgurl",
+
+        category: "imgbb",
+
+        guide: "{p}imgbb"
+
+    },
+
+    onStart: function ({ api, event }) {
+
+        return shortURL(api, event);
+
     }
-  }
+
 };
