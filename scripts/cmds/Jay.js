@@ -5,8 +5,8 @@ const canvas = require("canvas");
 
 module.exports = {
   config: {
-    name: "mia",
-    aliases: ["mia khalifa"],
+    name: "jay",
+    aliases: ["jay walker"],
     author: "Otineeeeyyyy",
     countDown: 5,
     role: 0,
