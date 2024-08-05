@@ -1,4 +1,4 @@
-#cmd install ai.js const axios = require('axios');
+const axios = require('axios');
 
 async function fetchFromAI(url, params) {
   try {
@@ -15,7 +15,7 @@ async function getAIResponse(input, userId, messageID) {
      { url: 'https://metoushela-rest-api-tp5g.onrender.com/api/gpt4o?', params: { context: input } }
   ];
 
-  let response = "Hey salut ʚɸɞ Métöushela ʚɸɞ 👋🏾! Belle journée, pas vrai ? Pose ta question 💭, je serai ravie de t'aider.💜✏";
+  let response = "𝐇𝐢 𝐡𝐨𝐰 𝐚𝐫𝐞 𝐲𝐨𝐮, 𝐡𝐨𝐰 𝐜𝐚𝐧 𝐈 𝐡𝐞𝐥𝐩 𝐲𝐨𝐮 𝐬𝐨 𝐟𝐚𝐫 🙂";
   let currentIndex = 0;
 
   for (let i = 0; i < services.length; i++) {
@@ -34,7 +34,7 @@ async function getAIResponse(input, userId, messageID) {
 module.exports = {
   config: {
     name: 'ai',
-    author: 'Metoushela',
+    author: 'hamed',
     role: 0,
     category: 'ai',
     shortDescription: 'ai to ask anything',
@@ -54,13 +54,7 @@ module.exports = {
     if (messageContent.startsWith("ai")) {
       const input = messageContent.replace(/^ai\s*/, "").trim();
       const { response, messageID } = await getAIResponse(input, event.senderID, message.messageID);
-      message.reply(`
-        
-⚘𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻𝗻𝗲𝗹 | 📕
-━━━━━━━━━━━━━━━\n${response}\n━━━━━━━━━━━━━━━\n 🎀𝗖𝗿𝗲𝗱𝗶𝘁 𝗯𝘆 𝗮𝗽𝗶 ♔
-⚘𝗠𝗲𝘁𝗼𝘂𝘀𝗵𝗲𝗹𝗮♔\n━━━━━━━━━━━━━━━
-
-`, messageID);
+      message.reply(`✰....✰.𝗢𝗽𝗲𝗻𝗔𝗜.✰....✰: 💬\n⧠⧠⧠⧠⧠.✰.✰.⧠⧠⧠⧠⧠\n\n${response}\n\n╰┈┈┈➤⊹⊱✰✫✫✰⊰⊹`, messageID);
     }
   }
 };
