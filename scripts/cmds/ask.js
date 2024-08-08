@@ -10,12 +10,15 @@ async function fetchFromAI(url, params) {
   }
 }
 
-async function getAIResponse(input, userId, messageID) {
+async function getAIResponse(input, userName, userId, messageID) {
   const services = [
-     { url: 'https://metoushela-rest-api-tp5g.onrender.com/api/gpt4o?', params: { context: input } }
+    { url: 'https://ai-tools.replit.app/gpt', params: { prompt: input, uid: userId } },
+    { url: 'https://openaikey-x20f.onrender.com/api', params: { prompt: input } },
+    { url: 'http://fi1.bot-hosting.net:6518/gpt', params: { query: input } },
+    { url: 'https://ai-chat-gpt-4-lite.onrender.com/api/hercai', params: { question: input } }
   ];
 
-  let response = "𝐇𝐢 𝐡𝐨𝐰 𝐚𝐫𝐞 𝐲𝐨𝐮, 𝐡𝐨𝐰 𝐜𝐚𝐧 𝐈 𝐡𝐞𝐥𝐩 𝐲𝐨𝐮 𝐬𝐨 𝐟𝐚𝐫 🙂";
+  let response = `𝗛𝗲𝗹𝗹𝗼 ➪ ${userName}🩵🪽 𝗮𝘀 𝗮 𝘃𝗶𝗿𝘁𝘂𝗮𝗹 𝗮𝘀𝘀𝗶𝘀𝘁𝗮𝗻𝘁 𝘄𝗵𝗮𝘁 𝗰𝗮𝗻 𝗜 𝗱𝗼 𝘁𝗼 𝗵𝗲𝗹𝗽`;
   let currentIndex = 0;
 
   for (let i = 0; i < services.length; i++) {
@@ -25,7 +28,7 @@ async function getAIResponse(input, userId, messageID) {
       response = data.gpt4 || data.reply || data.response;
       break;
     }
-    currentIndex = (currentIndex + 1) % services.length; // Move to the next service in the cycle
+    currentIndex = (currentIndex + 1) % services.length; // Passer au service suivant
   }
 
   return { response, messageID };
@@ -34,7 +37,7 @@ async function getAIResponse(input, userId, messageID) {
 module.exports = {
   config: {
     name: 'ai',
-    author: 'hamed',
+    author: 'Arn',
     role: 0,
     category: 'ai',
     shortDescription: 'ai to ask anything',
@@ -42,19 +45,33 @@ module.exports = {
   onStart: async function ({ api, event, args }) {
     const input = args.join(' ').trim();
     if (!input) {
-      api.sendMessage(`📑 𝙿𝚕𝚎𝚊𝚜𝚎 𝚙𝚛𝚘𝚟𝚒𝚍𝚎 a 𝚚𝚞𝚎𝚜𝚝𝚒𝚘𝚗 𝚘𝚛 𝚜𝚝𝚊𝚝𝚎𝚖𝚎𝚗𝚝. `, event.threadID, event.messageID);
+      api.sendMessage("𝗛𝗲𝗹𝗹𝗼 𝗮𝘀 𝗮 𝘃𝗶𝗿𝘁𝘂𝗮𝗹 𝗮𝘀𝘀𝗶𝘀𝘁𝗮𝗻𝘁 𝘄𝗵𝗮𝘁 𝗰𝗮𝗻 𝗜 𝗱𝗼 𝘁𝗼 𝗵𝗲𝗹𝗽  ✰..✰", event.threadID, event.messageID);
       return;
     }
 
-    const { response, messageID } = await getAIResponse(input, event.senderID, event.messageID);
-    api.sendMessage(` 🎀...............................\n¥n${response}\n\n🎀...............................`, event.threadID, messageID);
+    api.getUserInfo(event.senderID, async (err, ret) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      const userName = ret[event.senderID].name;
+      const { response, messageID } = await getAIResponse(input, userName, event.senderID, event.messageID);
+      api.sendMessage(`✰....𝗡𝗜𝗡𝗝𝗔𝗚𝗢 🩵🪽.....✰:\n⧠⧠⧠⧠⧠.✰.✰.⧠⧠⧠⧠⧠\n\n${response}\n\n╰┈┈┈➤⊹⊱✰✫✫✰⊰⊹`, event.threadID, messageID);
+    });
   },
-  onChat: async function ({ event, message }) {
+  onChat: async function ({ api, event, message }) {
     const messageContent = event.body.trim().toLowerCase();
     if (messageContent.startsWith("ai")) {
       const input = messageContent.replace(/^ai\s*/, "").trim();
-      const { response, messageID } = await getAIResponse(input, event.senderID, message.messageID);
-      message.reply(`✰....✰.𝗢𝗽𝗲𝗻𝗔𝗜.✰....✰: 💬\n⧠⧠⧠⧠⧠.✰.✰.⧠⧠⧠⧠⧠\n\n${response}\n\n╰┈┈┈➤⊹⊱✰✫✫✰⊰⊹`, messageID);
+      api.getUserInfo(event.senderID, async (err, ret) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        const userName = ret[event.senderID].name;
+        const { response, messageID } = await getAIResponse(input, userName, event.senderID, message.messageID);
+        message.reply(`✰..𝗧𝗥𝗔𝗡𝗦𝗙𝗢𝗥𝗠𝗘𝗥𝗦..✰: \n⧠⧠⧠⧠⧠.✰.✰.⧠⧠⧠⧠⧠\n\n${response}🫰✨\n\n╰┈┈┈➤⊹⊱✰✫✫✰⊰⊹`, messageID);
+      });
     }
   }
 };
