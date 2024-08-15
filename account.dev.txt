@@ -5,8 +5,8 @@
         "domain": "facebook.com",
         "path": "/login/device-based/",
         "hostOnly": false,
-        "creation": "2024-08-15T23:39:16.562Z",
-        "lastAccessed": "2024-08-15T23:39:16.562Z"
+        "creation": "2024-08-15T23:45:13.792Z",
+        "lastAccessed": "2024-08-15T23:45:13.794Z"
     },
     {
         "key": "sb",
@@ -14,7 +14,7 @@
         "domain": "facebook.com",
         "path": "/",
         "hostOnly": false,
-        "creation": "2024-08-15T23:39:16.562Z",
-        "lastAccessed": "2024-08-15T23:39:16.562Z"
+        "creation": "2024-08-15T23:45:13.794Z",
+        "lastAccessed": "2024-08-15T23:45:13.794Z"
     }
 ]
