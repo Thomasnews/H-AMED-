@@ -14,11 +14,11 @@ async function getAIResponse(input, userId, messageID) {
   const services = [
     { url: 'https://ai-tools.replit.app/gpt', params: { prompt: input, uid: userId } },
     { url: 'https://openaikey-x20f.onrender.com/api', params: { prompt: input } },
-    { url: 'https://metoushela-rest-api-tp5g.onrender.com/api/gpt4o?', params: { context: input } },
-    { url: 'https://jonellccprojectapis10.adaptable.app/api/gpt4o', params: { context: input } }
+    { url: 'http://fi1.bot-hosting.net:6518/gpt', params: { query: input } },
+    { url: 'https://ai-chat-gpt-4-lite.onrender.com/api/hercai', params: { question: input } }
   ];
 
-  let response = "il semble qu'il y ait un problème veuillez réessayer ❗";
+  let response = "Hello, How can I be of help to you? ✏️📚";
   let currentIndex = 0;
 
   for (let i = 0; i < services.length; i++) {
@@ -45,7 +45,7 @@ module.exports = {
   onStart: async function ({ api, event, args }) {
     const input = args.join(' ').trim();
     if (!input) {
-      api.sendMessage(`𝗔𝗦𝗦𝗜𝗦𝗧𝗔𝗡𝗧 𝗔𝗡𝗦𝗪𝗘𝗥𝗘𝗗✅\n━━━━━━━━━━━━━━━━\nPlease provide a question or statement.\n`, event.threadID, event.messageID);
+      api.sendMessage(`𝗔𝗦𝗦𝗜𝗦𝗧𝗔𝗡𝗧 𝗔𝗡𝗦𝗪𝗘𝗥𝗘𝗗✅\n━━━━━━━━━━━━━━━━\nPlease provide a question or statement.\n━━━━━━━━━━━━━━━━`, event.threadID, event.messageID);
       return;
     }
 
@@ -58,6 +58,7 @@ module.exports = {
       const input = messageContent.replace(/^ai\s*/, "").trim();
       const { response, messageID } = await getAIResponse(input, event.senderID, message.messageID);
       message.reply(`[📕] 𝗢𝗣𝗧𝗜𝗠𝗨𝗦 𝗣𝗥𝗜𝗠𝗘\n\n${response}\n\n[📚]··········································⬚`, messageID);
+api.setMessageReaction("📕", event.messageID, () => {}, true);
     }
   }
 };
